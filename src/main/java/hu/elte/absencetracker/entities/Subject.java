@@ -1,7 +1,6 @@
 package hu.elte.absencetracker.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.sql.Time;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +12,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -22,33 +19,16 @@ import javax.persistence.OneToMany;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Lesson {
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @OneToMany(mappedBy = "lesson")
-    private List<Absence> absences;
-
-    /*@ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private User teacher;*/
-    
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Subject subject;
-    
-    /*@ManyToMany
-    @JoinTable
-    private List<User> students;*/
-    
     @Column
     @NotNull
-    private Time time;
+    private String Name;
     
-    @Column
-    @NotNull
-    private Integer weekday;
+    @OneToMany(mappedBy = "subject")
+    private List<Lesson> lessons;
+      
 }
