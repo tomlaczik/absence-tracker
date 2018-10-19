@@ -1,6 +1,5 @@
 package hu.elte.absencetracker.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +25,7 @@ public class Subject {
     
     @Column
     @NotNull
-    private String Name;
+    private String name;
     
     @OneToMany(mappedBy = "subject")
     private List<Lesson> lessons;

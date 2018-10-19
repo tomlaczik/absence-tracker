@@ -14,6 +14,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -28,21 +30,23 @@ public class Lesson {
     private Integer id;
     
     @OneToMany(mappedBy = "lesson")
+    @JsonIgnore
     private List<Absence> absences;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn
     @JsonIgnore
-    private User teacher;*/
+    private User teacher;
     
     @ManyToOne
     @JoinColumn
     @JsonIgnore
     private Subject subject;
     
-    /*@ManyToMany
+    @ManyToMany
     @JoinTable
-    private List<User> students;*/
+    @JsonIgnore
+    private List<User> students;
     
     @Column
     @NotNull
