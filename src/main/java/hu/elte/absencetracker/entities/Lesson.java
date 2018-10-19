@@ -1,5 +1,6 @@
 package hu.elte.absencetracker.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.sql.Time;
 import java.util.List;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -32,10 +35,10 @@ public class Lesson {
     @JsonIgnore
     private User teacher;*/
     
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn
     @JsonIgnore
-    private Subject subject;*/
+    private Subject subject;
     
     /*@ManyToMany
     @JoinTable
