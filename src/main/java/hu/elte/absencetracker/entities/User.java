@@ -27,16 +27,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column
-    @NotNull
-    private String name;
+    @Column(nullable = false)
+    private String username;
     
-    /*
-    @Column
-    @NotNull
+    @Column(nullable = false)
+    private String password;
+    
+    @Column(nullable = false)
+    private boolean enabled;
+    
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-    */
+    
+    public enum Role{
+        STUDENT,TEACHER,ADMIN
+    }
     
     @ManyToMany(mappedBy = "students")
     private List<Lesson> activeLessons;

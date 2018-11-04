@@ -1,6 +1,10 @@
-INSERT INTO USER (NAME) VALUES ('Kis Bela');
-INSERT INTO USER (NAME) VALUES ('Nagy Bela');
-INSERT INTO USER (NAME) VALUES ('Tanar');
+--INSERT INTO USER (NAME) VALUES ('Kis Bela');
+--INSERT INTO USER (NAME) VALUES ('Nagy Bela');
+--INSERT INTO USER (NAME) VALUES ('Tanar');
+
+insert into user (username, password, enabled, role) values ('user1', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'ADMIN');
+insert into user (username, password, enabled, role) values ('user2', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'STUDENT');
+insert into user (username, password, enabled, role) values ('user3', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'TEACHER'); 
 
 INSERT INTO SUBJECT (NAME) VALUES ('Analizis');
 INSERT INTO SUBJECT (NAME) VALUES ('Analizis 2');
