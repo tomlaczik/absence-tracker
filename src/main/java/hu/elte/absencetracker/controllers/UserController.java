@@ -4,6 +4,7 @@ import hu.elte.absencetracker.entities.Absence;
 import hu.elte.absencetracker.entities.Lesson;
 import hu.elte.absencetracker.entities.User;
 import hu.elte.absencetracker.repositories.UserRepository;
+import hu.elte.absencetracker.security.AuthenticatedUser;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,23 +28,38 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuthenticatedUser authenticatedUser;
+
     @GetMapping("")
     public ResponseEntity<Iterable<User>> getAll() {
-        return ResponseEntity.ok(userRepository.findAll());
+        User authUser = authenticatedUser.getUser();
+        if (authUser.getRole().equals("ADMIN")) {
+            return ResponseEntity.ok(userRepository.findAll());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> get(@PathVariable Integer id) {
+@GetMapping("/{id}")
+        public ResponseEntity<User> get(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
+        User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
+            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+                return ResponseEntity.ok(user.get());
+            } else{
+                return ResponseEntity.badRequest().build();
+            }
+            
+        } else{
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping("register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+        public ResponseEntity<User> register(@RequestBody User user) {
         Optional<User> oUser = userRepository.findByUsername(user.getUsername());
         if (oUser.isPresent()) {
             return ResponseEntity.badRequest().build();
@@ -55,36 +71,54 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody User user) {
+        public ResponseEntity login(@RequestBody User user) {
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/activeLessons")
-    public ResponseEntity<Iterable<Lesson>> getActiveLessons(@PathVariable Integer id) {
+        public ResponseEntity<Iterable<Lesson>> getActiveLessons(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
+        User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get().getActiveLessons());
-        } else {
+            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+                return ResponseEntity.ok(user.get().getActiveLessons());
+            } else{
+                return ResponseEntity.badRequest().build();
+            }
+            
+        } else{
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/{id}/taughtLessons")
-    public ResponseEntity<Iterable<Lesson>> getTaughtLessons(@PathVariable Integer id) {
+        public ResponseEntity<Iterable<Lesson>> getTaughtLessons(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
+        User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get().getTaughtLessons());
-        } else {
+            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+                return ResponseEntity.ok(user.get().getTaughtLessons());
+            } else{
+                return ResponseEntity.badRequest().build();
+            }
+            
+        } else{
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/{id}/absences")
-    public ResponseEntity<Iterable<Absence>> getAbsences(@PathVariable Integer id) {
+        public ResponseEntity<Iterable<Absence>> getAbsences(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
+        User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get().getAbsences());
-        } else {
+            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+                return ResponseEntity.ok(user.get().getAbsences());
+            } else{
+                return ResponseEntity.badRequest().build();
+            }
+            
+        } else{
             return ResponseEntity.notFound().build();
         }
     }
