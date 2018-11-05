@@ -23,13 +23,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .csrf().disable()
             .authorizeRequests()
+                .antMatchers("/h2/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .httpBasic()
                 .and()
+            .headers()
+                .frameOptions().disable()
+                .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-            http.headers().frameOptions().disable();
     }    
 
     @Autowired
