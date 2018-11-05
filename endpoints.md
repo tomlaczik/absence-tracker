@@ -98,4 +98,4 @@
 ### - ".../subjects/id/lessons" @GetMapping
   - A végpontra belépve a függvény ellenőrzi, hogy létezik-e a tantárgy, ha igen, vissza tér a tantárgy tanóráival, egyébként pedig Not Found hibával.
 ### - ".../subjects/id/lessons" @PostMapping
-  -  A végpontra belépve a függvény ellenőrzi, hogy létezik-e a tantárgy, ha igen, ellenőrzi a jogosultságot. Ha a felhsználó ADMIN jogosultsággal rendelkezik, végrehajtja az új tanóra létrehozását és vissza ezzel, egyébként Not Foun hibát dob, ha nincs ilyen tanóra és Bad Request hibát ha rossz a jogosultság.
+  -  A végpontra belépve a függvény ellenőrzi, hogy létezik-e a tantárgy, ha igen, ellenőrzi a jogosultságot. Ha a felhsználó ADMIN jogosultsággal rendelkezik, végrehajtja az új tanóra létrehozását és vissza tér ezzel, egyébként Not Found hibát dob, ha nincs ilyen tanóra és Bad Request hibát ha rossz a jogosultság.
