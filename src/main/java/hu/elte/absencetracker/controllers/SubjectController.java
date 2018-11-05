@@ -8,6 +8,7 @@ import hu.elte.absencetracker.repositories.SubjectRepository;
 import hu.elte.absencetracker.security.AuthenticatedUser;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,44 +50,43 @@ public class SubjectController {
     @PostMapping("")
     public ResponseEntity<Subject> post(@RequestBody Subject subject) {
         User authUser = authenticatedUser.getUser();
-        if(authUser.getRole().equals("ADMIN")){
+        if(authUser.getRole() == User.Role.ADMIN){
             return ResponseEntity.ok(subjectRepository.save(subject));
-        } else{
-            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<Subject> update(@PathVariable Integer id, @RequestBody Subject newSubject) {
-        Optional<Subject> oldSubject = subjectRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if(oldSubject.isPresent()) {
-            if(authUser.getRole().equals("ADMIN")){
+        if(authUser.getRole() == User.Role.ADMIN){
+            Optional<Subject> oldSubject = subjectRepository.findById(id);
+            if(oldSubject.isPresent()) {
                 newSubject.setId(id);
                 return ResponseEntity.ok(subjectRepository.save(newSubject));
-            } else{
-                return ResponseEntity.badRequest().build();
+            } else {
+                return ResponseEntity.notFound().build();
             }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Subject> delete(@PathVariable Integer id) {
-        Optional<Subject> subject = subjectRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if(subject.isPresent()) {
-            if(authUser.getRole().equals("ADMIN")){
+        if(authUser.getRole() == User.Role.ADMIN) {
+            Optional<Subject> subject = subjectRepository.findById(id);
+            if(subject.isPresent()) {
                 subjectRepository.deleteById(id);
-                return ResponseEntity.ok().build();
-            } else{
-                 return ResponseEntity.badRequest().build();
+                return ResponseEntity.ok().build();            
+            } else {
+                return ResponseEntity.notFound().build();
             }
-            
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
     
@@ -102,18 +102,17 @@ public class SubjectController {
     
     @PostMapping("/{id}/lessons")
     public ResponseEntity<Lesson> postLesson(@PathVariable Integer id, @RequestBody Lesson lesson) {
-        Optional<Subject> subject = subjectRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if(subject.isPresent()) {
-            if(authUser.getRole().equals("ADMIN")){
-                 lesson.setSubject(subject.get());
+        if(authUser.getRole() == User.Role.ADMIN) {
+            Optional<Subject> subject = subjectRepository.findById(id);
+            if(subject.isPresent()) {
+                lesson.setSubject(subject.get());
                 return ResponseEntity.ok(lessonRepository.save(lesson));
-            } else{
-                return ResponseEntity.badRequest().build();
+            } else {
+                return ResponseEntity.notFound().build();
             }
-            
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

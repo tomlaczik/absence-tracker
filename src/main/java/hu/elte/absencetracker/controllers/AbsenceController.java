@@ -6,6 +6,7 @@ import hu.elte.absencetracker.repositories.AbsenceRepository;
 import hu.elte.absencetracker.security.AuthenticatedUser;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,72 +30,67 @@ public class AbsenceController {
     @GetMapping("")
     public ResponseEntity<Iterable<Absence>> getAll() {
         User authUser = authenticatedUser.getUser();
-        if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
             return ResponseEntity.ok(absenceRepository.findAll());
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Absence> get(@PathVariable Integer id) {
-        Optional<Absence> absence = absenceRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if (absence.isPresent()) {
-            if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
+            Optional<Absence> absence = absenceRepository.findById(id);
+            if (absence.isPresent()) {
                 return ResponseEntity.ok(absence.get());
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
-
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @PostMapping("")
     public ResponseEntity<Absence> post(@RequestBody Absence absence) {
         User authUser = authenticatedUser.getUser();
-        if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
             return ResponseEntity.ok(absenceRepository.save(absence));
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Absence> update(@PathVariable Integer id, @RequestBody Absence newAbsence) {
-        Optional<Absence> oldAbsence = absenceRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if (oldAbsence.isPresent()) {
-            if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
+            Optional<Absence> oldAbsence = absenceRepository.findById(id);
+            if (oldAbsence.isPresent()) {
                 newAbsence.setId(id);
                 return ResponseEntity.ok(absenceRepository.save(newAbsence));
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
-
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Absence> delete(@PathVariable Integer id) {
-        Optional<Absence> absence = absenceRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if (absence.isPresent()) {
-            if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
+            Optional<Absence> absence = absenceRepository.findById(id);
+            if (absence.isPresent()) {
                 absenceRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
-
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

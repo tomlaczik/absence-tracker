@@ -7,6 +7,7 @@ import hu.elte.absencetracker.repositories.UserRepository;
 import hu.elte.absencetracker.security.AuthenticatedUser;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,10 +35,10 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity<Iterable<User>> getAll() {
         User authUser = authenticatedUser.getUser();
-        if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
             return ResponseEntity.ok(userRepository.findAll());
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
     }
@@ -47,13 +48,12 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+            if(authUser.getId().equals(user.get().getId()) || authUser.getRole() == User.Role.ADMIN){
                 return ResponseEntity.ok(user.get());
-            } else{
-                return ResponseEntity.badRequest().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            
-        } else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -62,7 +62,7 @@ public class UserController {
         public ResponseEntity<User> register(@RequestBody User user) {
         Optional<User> oUser = userRepository.findByUsername(user.getUsername());
         if (oUser.isPresent()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
@@ -80,13 +80,12 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+            if(authUser.getId().equals(user.get().getId()) || authUser.getRole() == User.Role.ADMIN){
                 return ResponseEntity.ok(user.get().getActiveLessons());
-            } else{
-                return ResponseEntity.badRequest().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            
-        } else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -96,13 +95,13 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+            if(authUser.getId().equals(user.get().getId()) || authUser.getRole() == User.Role.ADMIN){
                 return ResponseEntity.ok(user.get().getTaughtLessons());
-            } else{
-                return ResponseEntity.badRequest().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             
-        } else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -112,13 +111,12 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
-            if(authUser.getId() == user.get().getId() || authUser.getRole().equals("ADMIN")){
+            if(authUser.getId().equals(user.get().getId()) || authUser.getRole() == User.Role.ADMIN){
                 return ResponseEntity.ok(user.get().getAbsences());
-            } else{
-                return ResponseEntity.badRequest().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            
-        } else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

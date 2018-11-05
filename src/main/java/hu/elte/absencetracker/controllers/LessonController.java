@@ -8,6 +8,7 @@ import hu.elte.absencetracker.repositories.LessonRepository;
 import hu.elte.absencetracker.security.AuthenticatedUser;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,43 +50,43 @@ public class LessonController {
     @PostMapping("")
     public ResponseEntity<Lesson> post(@RequestBody Lesson lesson) {
         User authUser = authenticatedUser.getUser();
-        if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
             return ResponseEntity.ok(lessonRepository.save(lesson));
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Lesson> update(@PathVariable Integer id, @RequestBody Lesson newLesson) {
-        Optional<Lesson> oldLesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if (oldLesson.isPresent()) {
-            if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
+            Optional<Lesson> oldLesson = lessonRepository.findById(id);
+            if (oldLesson.isPresent()) {
                 newLesson.setId(id);
                 return ResponseEntity.ok(lessonRepository.save(newLesson));
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Lesson> delete(@PathVariable Integer id) {
-        Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
-        if (lesson.isPresent()) {
-            if (authUser.getRole().equals("ADMIN")) {
+        if (authUser.getRole() == User.Role.ADMIN) {
+            Optional<Lesson> lesson = lessonRepository.findById(id);
+            if (lesson.isPresent()) {
                 lessonRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
@@ -94,10 +95,10 @@ public class LessonController {
         Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (lesson.isPresent()) {
-            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole().equals("ADMIN")) {
+            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole() == User.Role.ADMIN) {
                 return ResponseEntity.ok(lesson.get().getAbsences());
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
         } else {
             return ResponseEntity.notFound().build();
@@ -109,11 +110,11 @@ public class LessonController {
         Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (lesson.isPresent()) {
-            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole().equals("ADMIN")) {
+            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole() == User.Role.ADMIN) {
                 absence.setLesson(lesson.get());
                 return ResponseEntity.ok(absenceRepository.save(absence));
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
         } else {
