@@ -44,9 +44,14 @@ public class UserController {
         }
 
     }
+    
+    @GetMapping("/me")
+    public ResponseEntity<User> login() {
+        return ResponseEntity.ok(userRepository.findById(authenticatedUser.getUser().getId()).get());
+    }
 
-@GetMapping("/{id}")
-        public ResponseEntity<User> get(@PathVariable Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<User> get(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (user.isPresent()) {
@@ -70,11 +75,6 @@ public class UserController {
         user.setEnabled(true);
         user.setRole(User.Role.STUDENT);
         return ResponseEntity.ok(userRepository.save(user));
-    }
-
-    @PostMapping("login")
-        public ResponseEntity login(@RequestBody User user) {
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/activeLessons")
