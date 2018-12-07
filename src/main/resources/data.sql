@@ -3,19 +3,29 @@
 --INSERT INTO USER (NAME) VALUES ('Tanar');
 
 insert into user (username, password, enabled, role) values ('user1', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'ADMIN');
-insert into user (username, password, enabled, role) values ('user2', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'STUDENT');
-insert into user (username, password, enabled, role) values ('user3', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'TEACHER'); 
+insert into user (username, password, enabled, role) values ('student1', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'STUDENT');
+insert into user (username, password, enabled, role) values ('student2', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'STUDENT');
+insert into user (username, password, enabled, role) values ('teacher1', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'TEACHER');
+insert into user (username, password, enabled, role) values ('teacher2', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', true, 'TEACHER'); 
 
 INSERT INTO SUBJECT (NAME) VALUES ('Analizis');
 INSERT INTO SUBJECT (NAME) VALUES ('Analizis 2');
+INSERT INTO SUBJECT (NAME) VALUES ('Nummod');
+INSERT INTO SUBJECT (NAME) VALUES ('AlkFejl');
 
-INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (3, 1, PARSEDATETIME('16:22', 'HH:mm'), 4);
-INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (3, 2, PARSEDATETIME('14:21', 'HH:mm'), 7);
+INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (4, 1, PARSEDATETIME('16:00', 'HH:mm'), 1);
+INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (5, 4, PARSEDATETIME('14:00', 'HH:mm'), 2);
+INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (5, 4, PARSEDATETIME('8:00', 'HH:mm'), 3);
+INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (4, 1, PARSEDATETIME('9:00', 'HH:mm'), 3);
+INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (4, 3, PARSEDATETIME('10:15', 'HH:mm'), 4);
+INSERT INTO LESSON (TEACHER_ID, SUBJECT_ID, TIME, WEEKDAY) VALUES (4, 2, PARSEDATETIME('12:30', 'HH:mm'), 5);
 
-INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (1, 1, 5);
-INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (1, 1, 2);
-INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (2, 2, 7);
-INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (2, 2, 2);
+INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (2, 1, 5);
+INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (2, 4, 2);
+INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (3, 2, 1);
+INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (3, 2, 2);
+INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (3, 2, 3);
+INSERT INTO ABSENCE (USER_ID, LESSON_ID, WEEK) VALUES (3, 2, 4);
 --Nem ismeri fel a táblát, ez lenne a manytomany kapcsoló táblája elvileg
 --INSERT INTO LESSON_USERS (ACTIVELESSONS_ID, STUDENTS_ID) VALUES (1,1);
 --INSERT INTO LESSON_USERS (ACTIVELESSONS_ID, STUDENTS_ID) VALUES (2,2);
