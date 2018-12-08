@@ -106,6 +106,21 @@ public class LessonController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @GetMapping("/{id}/students")
+    public ResponseEntity<Iterable<User>> getStudents(@PathVariable Integer id) {
+        Optional<Lesson> lesson = lessonRepository.findById(id);
+        User authUser = authenticatedUser.getUser();
+        if (lesson.isPresent()) {
+            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole() == User.Role.ADMIN) {
+                return ResponseEntity.ok(lesson.get().getStudents());
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping("/{id}/absences")
     public ResponseEntity<Absence> postAbsence(@PathVariable Integer id, @RequestBody Absence absence) {
