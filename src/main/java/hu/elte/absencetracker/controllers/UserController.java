@@ -71,11 +71,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("register")
-        public ResponseEntity<User> register(@RequestBody User user) {
+    @PostMapping("")
+    public ResponseEntity<User> register(@RequestBody User user) {
         Optional<User> oUser = userRepository.findByUsername(user.getUsername());
-        if (oUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if(oUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
