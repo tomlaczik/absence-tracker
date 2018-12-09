@@ -43,7 +43,7 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity<Iterable<User>> getAll() {
         User authUser = authenticatedUser.getUser();
-        if (authUser.getRole() == User.Role.ADMIN) {
+        if (authUser.getRole() == User.Role.ADMIN || authUser.getRole() == User.Role.TEACHER) {
             return ResponseEntity.ok(userRepository.findAll());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -89,7 +89,7 @@ public class UserController {
         if(oUser.isPresent()) {
             User authUser = authenticatedUser.getUser();
             User user = oUser.get();
-            if(authUser.getId().equals(user.getId()) || authUser.getRole() == User.Role.ADMIN){
+            if(authUser.getId().equals(user.getId()) || authUser.getRole() == User.Role.ADMIN || authUser.getRole() == User.Role.TEACHER){
                 Optional<Lesson> oLesson = lessonRepository.findById(lesson.getId());
                 if(oLesson.isPresent()) {
                     lesson = oLesson.get();
@@ -115,7 +115,7 @@ public class UserController {
         if(oUser.isPresent()) {
             User authUser = authenticatedUser.getUser();
             User user = oUser.get();
-            if(authUser.getId().equals(user.getId()) || authUser.getRole() == User.Role.ADMIN) {
+            if(authUser.getId().equals(user.getId()) || authUser.getRole() == User.Role.ADMIN || authUser.getRole() == User.Role.TEACHER) {
                 Optional<Lesson> oLesson = lessonRepository.findById(lessonId);
                 if(oLesson.isPresent()) {
                     Lesson lesson = oLesson.get();
