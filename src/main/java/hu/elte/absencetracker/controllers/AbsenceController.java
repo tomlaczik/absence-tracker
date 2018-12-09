@@ -83,7 +83,7 @@ public class AbsenceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Absence> delete(@PathVariable Integer id) {
         User authUser = authenticatedUser.getUser();
-        if (authUser.getRole() == User.Role.ADMIN) {
+        if (authUser.getRole() == User.Role.TEACHER) {
             Optional<Absence> absence = absenceRepository.findById(id);
             if (absence.isPresent()) {
                 absenceRepository.deleteById(id);

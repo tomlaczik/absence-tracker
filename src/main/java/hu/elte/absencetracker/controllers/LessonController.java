@@ -5,6 +5,7 @@ import hu.elte.absencetracker.entities.Lesson;
 import hu.elte.absencetracker.entities.User;
 import hu.elte.absencetracker.repositories.AbsenceRepository;
 import hu.elte.absencetracker.repositories.LessonRepository;
+import hu.elte.absencetracker.repositories.UserRepository;
 import hu.elte.absencetracker.security.AuthenticatedUser;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
@@ -30,6 +32,9 @@ public class LessonController {
 
     @Autowired
     private AbsenceRepository absenceRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
@@ -123,12 +128,13 @@ public class LessonController {
     }
 
     @PostMapping("/{id}/absences")
-    public ResponseEntity<Absence> postAbsence(@PathVariable Integer id, @RequestBody Absence absence) {
+    public ResponseEntity<Absence> postAbsence(@PathVariable Integer id, @RequestBody Absence absence, @RequestParam("user") Integer userId) {
         Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (lesson.isPresent()) {
             if (lesson.get().getTeacher().getId().equals(authUser.getId()) || authUser.getRole() == User.Role.ADMIN) {
                 absence.setLesson(lesson.get());
+                absence.setUser(userRepository.findById(userId).get());
                 return ResponseEntity.ok(absenceRepository.save(absence));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
