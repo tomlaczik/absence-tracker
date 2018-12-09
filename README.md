@@ -66,12 +66,20 @@
 #### - "" @GetMapping
   - Kilistázza az összes usert.
   - Admin jogosultság szükséges.
+#### - "/me" @GetMapping
+  - A jelenleg authenticált usert adja vissza.
 #### - "/id" @GetMapping
   - Kilistázza a usert, akihez tartozik az "id".
   - Admin vagy Teacher jogosultság szükséges
 #### - /id/activeLessons @GetMapping
   - Kilistázza az "id"-vel rendelkező user felvett óráit
   - Admin jogosultság szükséges, vagy a keresett user
+#### - /id/activeLessons @PostMapping
+  - A megadott userhez a body-ban lévő tanórát felveszi.
+  - Admin jogosultság szükséges, vagy az authentikált user
+#### - /id/activeLessons @DeleteMapping
+  - A megadott userhez a body-ban lévő tanórát leadja.
+  - Admin jogosultság szükséges, vagy az authentikált user
 #### - /id/taughtLessons @GetMapping
   - Kilistázza az "id"-vel rendelkező user tanított óráit
   - Admin jogosultság szükséges, vagy a keresett user
@@ -98,6 +106,9 @@
   - Admin jogosultság szükséges
 #### - "/id/absences" @GetMapping
   - Kilistázza az "id"-vel rendelkező tanórához tartozó hiányzásokat
+  - Admin jogosultság vagy a tanóra tanárja szükséges hozzá
+#### - "/id/students" @GetMapping
+  - Kilistázza az "id"-vel rendelkező tanórához tartozó hallgatókat
   - Admin jogosultság vagy a tanóra tanárja szükséges hozzá
 #### - "/id/absences" @PostMapping
   - Létrehoz egy hiányzást az "id"-vel rendelkező tanórához
