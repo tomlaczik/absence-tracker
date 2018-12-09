@@ -97,7 +97,7 @@ public class LessonController {
         Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (lesson.isPresent()) {
-            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole() == User.Role.ADMIN) {
+            if (lesson.get().getTeacher().getId().equals(authUser.getId()) || authUser.getRole() == User.Role.ADMIN) {
                 return ResponseEntity.ok(lesson.get().getAbsences());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -112,7 +112,7 @@ public class LessonController {
         Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (lesson.isPresent()) {
-            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole() == User.Role.ADMIN) {
+            if (lesson.get().getTeacher().getId().equals(authUser.getId()) || authUser.getRole() == User.Role.ADMIN) {
                 return ResponseEntity.ok(lesson.get().getStudents());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -127,7 +127,7 @@ public class LessonController {
         Optional<Lesson> lesson = lessonRepository.findById(id);
         User authUser = authenticatedUser.getUser();
         if (lesson.isPresent()) {
-            if (lesson.get().getTeacher().equals(authUser) || authUser.getRole() == User.Role.ADMIN) {
+            if (lesson.get().getTeacher().getId().equals(authUser.getId()) || authUser.getRole() == User.Role.ADMIN) {
                 absence.setLesson(lesson.get());
                 return ResponseEntity.ok(absenceRepository.save(absence));
             } else {
