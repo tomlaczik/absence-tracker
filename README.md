@@ -49,7 +49,11 @@
 
 ## Fejlesztői Környezet / Használt Technológiák
 
-
+- Fejlesztői környezet
+  - NetBeans
+- Használt technológiák:
+  - Java SE
+  - Spring Boot
 
 ## Adatbázis-terv
 
